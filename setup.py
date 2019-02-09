@@ -8,8 +8,8 @@ f.close()
 
 
 setup(
-	name='PyAxe',
-	version=__import__('PyAxe').__version__,
+    name='PyAxe',
+    version=__import__('PyAxe').__version__,
     description='An utility library for building command-line tool easily',
     long_description=readme,
     author='Sun Jin',
