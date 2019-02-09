@@ -7,14 +7,12 @@ class BuildParams:
     OS_CALL_TYPE_SYSTEM = 0  # AOS.system
     OS_CALL_TYPE_PROCESS = 1  # AOS.process
 
-    def __init__(self, buildDir, sourceDir, installDir, buildType):
+    def __init__(self, sourceDir, installDir, buildType):
         """
-        :param buildDir: 构建目录
-        :param sourceDir: 根 CMakeLists.txt 所在目录；如果是相对路径，则为相对于buildDir的路径
+        :param sourceDir: 根 CMakeLists.txt 所在目录
         :param installDir: 安装目录(--prefix)
         :param buildType: 构建类型(Debug or Release)
         """
-        self.buildDir = buildDir
         self.sourceDir = sourceDir
         self.installDir = installDir
         self.buildType = buildType
@@ -60,33 +58,32 @@ class BuildParams:
 
 
 def _cmake_win32(buildParams):
-    AOS.makeDir(buildParams.buildDir)
-    with AOS.ChangeDir(buildParams.buildDir):
-        buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" %s' % (
-            buildParams.generator,
-            buildParams.sourceDir,
-            buildParams.installDir,
-            buildParams.extraCMakeOptions
-        ))
-        # 注意/t:INSTALL会失败
-        buildParams.osCall(
-            r'%s %s /t:build /p:Configuration=%s /p:BuildInParallel=true /m'
-            % (AVS.Path(buildParams.win32_vsVersion).MSBuildEXE, 'INSTALL.vcxproj', buildParams.buildType))
+    buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" %s' % (
+        buildParams.generator,
+        buildParams.sourceDir,
+        buildParams.installDir,
+        buildParams.extraCMakeOptions
+    ))
+    # 注意/t:INSTALL会失败
+    buildParams.osCall(
+        r'%s %s /t:build /p:Configuration=%s /p:BuildInParallel=true /m'
+        % (AVS.Path(buildParams.win32_vsVersion).MSBuildEXE, 'INSTALL.vcxproj', buildParams.buildType))
 
 def _cmake_unix(buildParams):
-    AOS.makeDir(buildParams.buildDir)
-    with AOS.ChangeDir(buildParams.buildDir):
-        buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" -DCMAKE_BUILD_TYPE=%s %s' % (
-            buildParams.generator,
-            buildParams.sourceDir,
-            buildParams.installDir,
-            buildParams.buildType,
-            buildParams.extraCMakeOptions
-        ))
-        buildParams.osCall('make VERBOSE=1 %s' % buildParams.unix_makeJobCountStr, buildParams.unix_makeEncoding)
-        buildParams.osCall('make install', buildParams.unix_makeEncoding)
+    buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" -DCMAKE_BUILD_TYPE=%s %s' % (
+        buildParams.generator,
+        buildParams.sourceDir,
+        buildParams.installDir,
+        buildParams.buildType,
+        buildParams.extraCMakeOptions
+    ))
+    buildParams.osCall('make VERBOSE=1 %s' % buildParams.unix_makeJobCountStr, buildParams.unix_makeEncoding)
+    buildParams.osCall('make install', buildParams.unix_makeEncoding)
 
 def cmake(buildParams):
+    """
+    在当前位置进行构建并安装
+    """
     if os.name == 'nt':
         _cmake_win32(buildParams)
     else:
