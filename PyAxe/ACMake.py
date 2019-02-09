@@ -88,3 +88,8 @@ def cmake(buildParams):
         _cmake_win32(buildParams)
     else:
         _cmake_unix(buildParams)
+
+
+# 关于接口的设计
+# BuildParams并未提供buildDir，而是让用户自己创建buildDir，并进入其中进行cmake
+# 好处是sourceDir的意义更清晰，并且和cmake命令的工作方式一致
