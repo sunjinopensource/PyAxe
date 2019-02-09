@@ -1,4 +1,7 @@
 import socket
+import re
+import platform
+import subprocess
 
 def getLocalIP():
     """
