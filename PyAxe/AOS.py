@@ -155,9 +155,15 @@ class TempFile:
         return self.fp.name
 
 
-def quotePath(path):
+def fixPathArg(path):
     """防止路径出现特殊符号，如‘空格’ ‘-’ 等，导致执行命令行失败"""
-    return '"' + path + '"'
+    if os.name == 'nt':
+        if path.startswith('"') or path.endswith('"'):
+            return path
+        return '"' + path + '"'
+    else:
+        path.replace(' ', '\\ ')
+
 
 def system(cmd, echo=True, nullout=False):
     def fixRetCode(code):
@@ -233,13 +239,13 @@ def removeFile(file):
 
     if os.name == 'nt':
         try:
-            system('del /f/q ' + quotePath(file))
+            system('del /f/q ' + fixPathArg(file))
         except OS_SystemError as e:
             ALog.info('"%s" failed, remove readonly & hidden attribute, then retry' % e.cmd)
-            system('attrib -r -h ' + quotePath(file))  # 去掉只读和隐藏属性
-            system('del /f/q ' + quotePath(file))
+            system('attrib -r -h ' + fixPathArg(file))  # 去掉只读和隐藏属性
+            system('del /f/q ' + fixPathArg(file))
     else:
-        system('rm -rf ' + quotePath(file))
+        system('rm -rf ' + fixPathArg(file))
 
 
 def removeDir(dir):
@@ -257,14 +263,14 @@ def removeDir(dir):
 
     if os.name == 'nt':
         try:
-            system('rd /s/q ' + quotePath(dir))
+            system('rd /s/q ' + fixPathArg(dir))
         except OS_SystemError as e:
             ALog.info('"%s" failed, remove readonly & hidden attribute, then retry' % e.cmd)
             with ChangeDir(dir):
                 system('attrib -r -h /d /s')  # 去掉只读和隐藏属性
-            system('rd /s/q ' + quotePath(dir))
+            system('rd /s/q ' + fixPathArg(dir))
     else:
-        system('rm -rf ' + quotePath(dir))
+        system('rm -rf ' + fixPathArg(dir))
 
 
 def removePath(path):
@@ -287,9 +293,9 @@ def makeDir(dir):
     dir = os.path.normpath(dir)
 
     if os.name == 'nt':
-        system('md ' + quotePath(dir))
+        system('md ' + fixPathArg(dir))
     else:
-        system('mkdir -p ' + quotePath(dir))
+        system('mkdir -p ' + fixPathArg(dir))
 
 
 def remakeDir(dir):
@@ -315,9 +321,9 @@ def copyFile(src, dst):
     dst = os.path.normpath(dst)
 
     if os.name == 'nt':
-        system('copy /y %s %s' % (quotePath(src), quotePath(dst)))
+        system('copy /y %s %s' % (fixPathArg(src), fixPathArg(dst)))
     else:
-        system('cp -P %s %s' % (quotePath(src), quotePath(dst)))  # -P 保持符号链接
+        system('cp -P %s %s' % (fixPathArg(src), fixPathArg(dst)))  # -P 保持符号链接
 
 
 def copyDir(srcDir, dstDir, excludes=None):
@@ -362,17 +368,17 @@ def copyDir(srcDir, dstDir, excludes=None):
 
     if os.name == 'nt':
         if excludes is None:
-            system('xcopy %s\\* %s /r/i/c/k/h/e/q/y' % (quotePath(srcDir), quotePath(dstDir)))
+            system('xcopy %s\\* %s /r/i/c/k/h/e/q/y' % (fixPathArg(srcDir), fixPathArg(dstDir)))
         else:
             fp = tempfile.NamedTemporaryFile('w', delete=False)
             fp.writelines('\n'.join(excludes))
             fp.close()
-            system('xcopy %s\\* %s /r/i/c/k/h/e/q/y/exclude:%s' % (quotePath(srcDir), quotePath(dstDir), fp.name))
+            system('xcopy %s\\* %s /r/i/c/k/h/e/q/y/exclude:%s' % (fixPathArg(srcDir), fixPathArg(dstDir), fp.name))
             os.remove(fp.name)
     else:
         makeDir(dstDir)
         if excludes is None:
-            system('cp -R %s/* %s' % (quotePath(srcDir), quotePath(dstDir)))
+            system('cp -R %s/* %s' % (fixPathArg(srcDir), fixPathArg(dstDir)))
         else:
             _copyDirByPatterns(srcDir, dstDir, excludes)
 
@@ -420,9 +426,9 @@ def move(src, dst):
     dst = os.path.normpath(dst)
 
     if os.name == 'nt':
-        system('move /y %s %s' % (quotePath(src), quotePath(dst)))
+        system('move /y %s %s' % (fixPathArg(src), fixPathArg(dst)))
     else:
-        system('mv -f %s %s' % (quotePath(src), quotePath(dst)))
+        system('mv -f %s %s' % (fixPathArg(src), fixPathArg(dst)))
 
 
 def moveContentsToDir(srcDir, dstDir):
@@ -456,7 +462,7 @@ def makeLink(src, link, soft=True, force=False):
                 raise NotImplementedError('TODO删除目录的软链接')
         if options != '':
             cmd += ' ' + options
-        cmd += ' %s %s' % (quotePath(link), quotePath(src))
+        cmd += ' %s %s' % (fixPathArg(link), fixPathArg(src))
         system(cmd)
     else:
         cmd = 'ln'
@@ -464,7 +470,7 @@ def makeLink(src, link, soft=True, force=False):
             cmd += ' -s'
         if force:
             cmd += ' -f'
-        cmd += ' %s %s' % (quotePath(src), quotePath(link))
+        cmd += ' %s %s' % (fixPathArg(src), fixPathArg(link))
         system(cmd)
 
 
