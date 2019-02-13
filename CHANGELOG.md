@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+AOS.fixPathArg
+
 ## 1.0.3
 
 AOS.fixPathArg
