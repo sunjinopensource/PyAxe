@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5
+
+fix ACMake when cmake gen on windows
+
 ## 1.0.4
 
 AOS.fixPathArg
