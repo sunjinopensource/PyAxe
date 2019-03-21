@@ -57,26 +57,13 @@ class BuildParams:
             assert False
 
 
-def _cmake_win32(buildParams):
-    buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" %s' % (
-        buildParams.generator,
-        buildParams.sourceDir,
-        buildParams.installDir,
-        buildParams.extraCMakeOptions
-    ))
+def _make_win32(buildParams):    
     # 注意/t:INSTALL会失败
     buildParams.osCall(
         r'%s %s /t:build /p:Configuration=%s /p:BuildInParallel=true /m'
         % (AVS.Path(buildParams.win32_vsVersion).MSBuildEXE, 'INSTALL.vcxproj', buildParams.buildType))
 
-def _cmake_unix(buildParams):
-    buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" -DCMAKE_BUILD_TYPE=%s %s' % (
-        buildParams.generator,
-        buildParams.sourceDir,
-        buildParams.installDir,
-        buildParams.buildType,
-        buildParams.extraCMakeOptions
-    ))
+def _make_unix(buildParams):    
     buildParams.osCall('make VERBOSE=1 %s' % buildParams.unix_makeJobCountStr, buildParams.unix_makeEncoding)
     buildParams.osCall('make install', buildParams.unix_makeEncoding)
 
@@ -84,10 +71,18 @@ def cmake(buildParams):
     """
     在当前位置进行构建并安装
     """
+    buildParams.osCall('cmake -G "%s" %s -DCMAKE_INSTALL_PREFIX="%s" -DCMAKE_BUILD_TYPE=%s %s' % (
+        buildParams.generator,
+        buildParams.sourceDir,
+        buildParams.installDir,
+        buildParams.buildType,
+        buildParams.extraCMakeOptions
+    ))
+    
     if os.name == 'nt':
-        _cmake_win32(buildParams)
+        _make_win32(buildParams)
     else:
-        _cmake_unix(buildParams)
+        _make_unix(buildParams)
 
 
 # 关于接口的设计
