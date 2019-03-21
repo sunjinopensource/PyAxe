@@ -162,7 +162,7 @@ def fixPathArg(path):
             return path
         return '"' + path + '"'
     else:
-        path.replace(' ', '\\ ')
+        return path.replace(' ', '\\ ')
 
 
 def system(cmd, echo=True, nullout=False):

@@ -83,6 +83,10 @@ def tryWrite(filePath, content, encoding=None, newline=None):
 
 
 def isEncodingWith(filePath, encoding):
+    """
+    已知问题
+    1. 若文件编码为UTF8-BOM，isEncodingWith(GBK)返回True
+    """
     def isUTF8(encoding):
         return encoding.lower() in ('utf8', 'utf-8', 'utf_8', 'u8')
 
@@ -111,10 +115,8 @@ def isEncodingWith(filePath, encoding):
         with open(filePath, encoding=encoding) as fp:
             fp.read()
             return True
-    except UnicodeDecodeError:
+    except Exception:
         return False
-    except Exception as e:
-        raise
 
 
 def convertEncoding(filePath, encodingFrom, encodingTo, newline=None):
