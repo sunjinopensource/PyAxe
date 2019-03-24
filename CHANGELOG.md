@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.6
+
+fix AVS.Path for VS2017
+
 ## 1.0.5
 
 fix ACMake when cmake gen on windows

@@ -9,7 +9,9 @@ class Path:
         注意：从VS15(VS2017)开始，系统不再提供环境变量VS150COMNTOOLS
         https://developercommunity.visualstudio.com/content/problem/25776/vs150comntools-does-not-exists.html
         
-        因此若version>=15，需手工建立环境变量，如：VS150COMNTOOLS=D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\Tools
+        因此若version>=15，需手工建立环境变量，如：VS150COMNTOOLS=D:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\Tools\，注意以\结尾
+        
+        此外VSVARS32.bat也被新的VsDevCmd.bat替代：https://docs.microsoft.com/zh-cn/dotnet/csharp/language-reference/compiler-options/how-to-set-environment-variables-for-the-visual-studio-command-line
         """
         self.Version = version
         
