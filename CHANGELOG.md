@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.7
+
+fix ACMake osCall use encoding UTF-8
+
 ## 1.0.6
 
 fix AVS.Path for VS2017
