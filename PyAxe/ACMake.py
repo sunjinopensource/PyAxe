@@ -77,7 +77,7 @@ def cmake(buildParams):
         buildParams.installDir,
         buildParams.buildType,
         buildParams.extraCMakeOptions
-    ))
+    ), encoding='UTF-8')
     
     if os.name == 'nt':
         _make_win32(buildParams)
