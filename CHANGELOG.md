@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.8
+
+ALog.enableFileSink add param: logDir
+
 ## 1.0.7
 
 fix ACMake osCall use encoding UTF-8
