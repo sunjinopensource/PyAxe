@@ -119,9 +119,12 @@ def setLevel(level):
     global _level
     _level = level
 
-def enableFileSink(enable=True):
+def enableFileSink(enable=True, logDir=None):
     global _enableFileSink
     _enableFileSink = enable
+    
+    if enable:
+        _logDir = logDir
 
 def enableConsoleSink(enable=True):
     global _enableConsoleSink
