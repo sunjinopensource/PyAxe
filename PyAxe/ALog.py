@@ -120,10 +120,14 @@ def setLevel(level):
     _level = level
 
 def enableFileSink(enable=True, logDir=None):
+    """
+    :param logDir: 默认为可执行文件或脚本所在目录下的Log文件夹
+    """
     global _enableFileSink
-    _enableFileSink = enable
+    _enableFileSink = enable    
     
-    if enable:
+    if enable and logDir:
+        global _logDir
         _logDir = logDir
 
 def enableConsoleSink(enable=True):
