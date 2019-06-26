@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.11
+
+fix ADebug.decorate_logTracebackOnException
+
 ## 1.0.10
 
 fix ASVN.infoDict compatible with old svn version

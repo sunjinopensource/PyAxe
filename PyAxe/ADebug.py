@@ -19,7 +19,7 @@ def decorate_logTracebackOnException(func):
         try:
             return func(*args, **kwargs)
         except Exception:
-            ALog.error(traceback.format_exc())
+            ALog.error('%s', traceback.format_exc())
             raise
 
     return wrapper
