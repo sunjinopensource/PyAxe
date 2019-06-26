@@ -128,6 +128,8 @@ def infoDict(pathOrURL, revision=None, userpass=None):
     ret['url'] = entryNode.find('url').text
     
     repoNode = entryNode.find('repo')
+    if repoNode is None:
+        entryNode.find('repository')  # for compatible with old svn version such as v1.7.14
     repo = {}
     ret['repo'] = repo
     repo['root'] = repoNode.find('root').text
