@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.10
+
+fix ASVN.infoDict compatible with old svn version
+
 ## 1.0.9
 
 fix ASVN.infoDict compatible with old svn version
