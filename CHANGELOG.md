@@ -1,5 +1,10 @@
 # Changelog
 
+
+## 1.0.12
+
+AHash: getMD5OfFile&getMD5OfDir check path
+
 ## 1.0.11
 
 fix ADebug.decorate_logTracebackOnException
