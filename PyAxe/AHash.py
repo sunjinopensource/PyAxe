@@ -24,7 +24,7 @@ class Hasher:
         return m.hexdigest()
 
     def ofStr(self, s):
-        return self.ofBuffer(s.encoding('UTF-8'))
+        return self.ofBuffer(s.encode('UTF-8'))
 
     def ofFile(self, filePath):
         if not os.path.isfile(filePath):

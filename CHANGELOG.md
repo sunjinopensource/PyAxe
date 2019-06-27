@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.14
+
+fix AHash.ofStr with encoding -> encode
+
 ## 1.0.13
 
 AHash: refactor
