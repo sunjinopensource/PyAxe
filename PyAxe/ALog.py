@@ -39,7 +39,10 @@ _enable = True
 _enableFileSink = True
 _enableConsoleSink = True
 _enableMessageFormattedLeading = True
-_logDir = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'Log')
+if sys.argv[0] == '':  # in python interpreter
+    _logDir = os.path.join(os.path.abspath(sys.argv[0]), 'Log')
+else:
+    _logDir = os.path.join(os.path.dirname(os.path.abspath(sys.argv[0])), 'Log')
 _binName = os.path.basename(sys.argv[0])
 _hasWriteOpenLog = False
 _dateFormat = '%Y_%m_%d'

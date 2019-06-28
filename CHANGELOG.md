@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.15
+
+fix ALog.logDir in python interpreter
+
 ## 1.0.14
 
 fix AHash.ofStr with encoding -> encode
