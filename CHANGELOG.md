@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.16
+
+use environment var 'PyAxe.ALog.NoColor' to disable color print
+
 ## 1.0.15
 
 fix ALog.logDir in python interpreter

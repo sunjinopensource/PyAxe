@@ -98,7 +98,15 @@ def _log(level, msg, args):
         color = _levelColorTable[level]
         if color is not None:
             color = color.color
-
+    
+    # 若环境变量PyAxe.ALog.NoColor为1或true，则不输出颜色。
+    # 这在某些场景下是必须的：
+    # 比如在Linux上，通过websocketd运行的py脚本，若输出了颜色，则会失败
+    envNoColor = os.getenv('PyAxe.ALog.NoColor')    
+    if envNoColor is not None:
+        if envNoColor == '1' or envNoColor.lower() == 'true':
+            color = None
+    
     formatStr = _formatMessage(level, rawMsg, args)
     
     if _enableFileSink:
