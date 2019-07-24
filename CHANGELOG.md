@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.17
+
+PyAxe.ALog.NoColor -> PyAxe_ALog_NoColor
+
 ## 1.0.16
 
 use environment var 'PyAxe.ALog.NoColor' to disable color print

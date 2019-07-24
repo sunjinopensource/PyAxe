@@ -99,10 +99,10 @@ def _log(level, msg, args):
         if color is not None:
             color = color.color
     
-    # 若环境变量PyAxe.ALog.NoColor为1或true，则不输出颜色。
+    # 若环境变量PyAxe_ALog_NoColor为1或true，则不输出颜色。
     # 这在某些场景下是必须的：
     # 比如在Linux上，通过websocketd运行的py脚本，若输出了颜色，则会失败
-    envNoColor = os.getenv('PyAxe.ALog.NoColor')    
+    envNoColor = os.getenv('PyAxe_ALog_NoColor')  # 注意Linux下环境变量名必须为合法标识符，因此PyAxe.ALog.NoColor不合法
     if envNoColor is not None:
         if envNoColor == '1' or envNoColor.lower() == 'true':
             color = None
