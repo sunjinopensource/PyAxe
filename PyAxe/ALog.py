@@ -305,11 +305,11 @@ WHITE = _Color(_colorPrinterClass.WHITE)
 BRIGHT_WHITE = _Color(_colorPrinterClass.BRIGHT_WHITE)
 
 _levelColorTable = {
-    LEVEL_FATAL:    BRIGHT_RED,
-    LEVEL_ERROR:    BRIGHT_RED,
-    LEVEL_WARN:  BRIGHT_YELLOW,
-    LEVEL_INFO:     None,
-    LEVEL_DEBUG:    None,
+    LEVEL_FATAL: BRIGHT_RED,
+    LEVEL_ERROR: BRIGHT_RED,
+    LEVEL_WARN: BRIGHT_YELLOW,
+    LEVEL_INFO: None,
+    LEVEL_DEBUG: None,
 }
 
 def test():
