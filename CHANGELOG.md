@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.18
+
+revert 1.0.16~1.0.17
+
 ## 1.0.17
 
 PyAxe.ALog.NoColor -> PyAxe_ALog_NoColor
