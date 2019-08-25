@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.19
+AOS.FileLockStrategy for Linux
+
 ## 1.0.18
 
 revert 1.0.16~1.0.17
