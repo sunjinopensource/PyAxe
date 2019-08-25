@@ -5,6 +5,8 @@ import subprocess
 import shlex
 import locale
 import tempfile
+if os.name != 'nt':
+    import fcntl
 from . import ALog
 from . import AError
 
@@ -571,7 +573,7 @@ class decorate_lock:
             self.filePath = filePath
             self.fp = None
 
-        def lock(self):
+        def _lock_windows(self):
             if os.path.exists(self.filePath):
                 try:
                     os.remove(self.filePath)
@@ -580,6 +582,29 @@ class decorate_lock:
 
             self.fp = open(self.filePath, 'w')
 
-        def unlock(self):
+        def _unlock_windows(self):
             self.fp.close()
             removeFile(self.filePath)
+
+        def _lock_linux(self):
+            self.fp = open(self.filePath, 'w')
+            try:
+                fcntl.flock(self.fp, fcntl.LOCK_EX|fcntl.LOCK_NB)
+            except Exception:
+                raise self.__class__.LockError(self.filePath)
+
+        def _unlock_linux(self):
+            self.fp.close()  # 自动解除flock
+            removeFile(self.filePath)
+
+        def lock(self):
+            if os.name == 'nt':
+                self._lock_windows()
+            else:
+                self._lock_linux()
+
+        def unlock(self):
+            if os.name == 'nt':
+                self._unlock_windows()
+            else:
+                self._unlock_linux()
