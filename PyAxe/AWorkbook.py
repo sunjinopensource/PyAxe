@@ -147,6 +147,8 @@ class Sheet:
                 dataText = ''
                 dataNode = cellNode.find('{urn:schemas-microsoft-com:office:spreadsheet}Data')
                 if dataNode is not None:
+                    if dataNode.text is None:
+                        raise Workbook_Error('第 %d 行 第 %d 列，可能含有不支持的格式（比如使用了特殊字体等）' % (rowIndex, cellIndex))
                     dataText = dataNode.text.strip()
                     if dataText:
                         isFullBlankRow = False
