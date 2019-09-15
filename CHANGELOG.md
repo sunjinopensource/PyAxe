@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.20
+AWorkbook check Data
+
 ## 1.0.19
 AOS.FileLockStrategy for Linux
 
