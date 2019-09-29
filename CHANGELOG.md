@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.21
+fix AFTP.dir parsing line bug
+
 ## 1.0.20
 AWorkbook check Data
 
