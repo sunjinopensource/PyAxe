@@ -24,9 +24,9 @@ def dir(host, targetDir='/', userpass=ANONYMOUS_USERPASS):
         -rwxr-xr-x 1 ftp ftp        2943704 Aug 02  2016 cpuz_x32.exe
         -rw-r--r-- 1 ftp ftp      463451034 Jul 25  2016 exe_7v7_20160725_130231_master_a1b66ed_svn1206.rar
         """
-        pattern = re.compile(r'([d\-])([r\-][w\-][x\-][r\-][w\-][x\-][r\-][w\-][x\-])\s+?1\s+?(.+?)\s+?(\d+)\s([a-zA-Z]{3}\s\d{2}\s+.+?)\s(.*)')
+        pattern = re.compile(r'([dl\-])([r\-][w\-][xsStT\-][r\-][w\-][xsStT\-][r\-][w\-][xsStT\-])\s+(\d+)\s+(\S+?)\s+(\S+?)\s+(\d+)\s+([a-zA-Z]{3})\s+(\d{2})\s+(\S+?)\s+(.*)')
         result = pattern.match(line)
-        dir, permissionBits, user_group, size, date, name = result.groups()
+        dir, permissionBits, fileCount, user, group, size, month, day, yearOrTime, name = result.groups()
 
         stat = FileStat()
         stat.isDir = dir == 'd'
