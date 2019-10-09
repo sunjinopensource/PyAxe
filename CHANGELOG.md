@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.22
+fix AWorkbook Data.text
+
 ## 1.0.21
 fix AFTP.dir parsing line bug
 
