@@ -145,13 +145,23 @@ class Sheet:
                 lastCellIndex = cellIndex
 
                 dataText = ''
-                dataNode = cellNode.find('{urn:schemas-microsoft-com:office:spreadsheet}Data')
+                dataNode = cellNode.find('{urn:schemas-microsoft-com:office:spreadsheet}Data')                
                 if dataNode is not None:
-                    if dataNode.text is None:  # 比如<Data><Font>xxx</Font></Data>
-                        raise Workbook_Error('第 %d 行 第 %d 列，可能含有不支持的格式（比如使用了特殊字体等）' % (rowIndex, cellIndex))
-                    dataText = dataNode.text.strip()
-                    if dataText:
-                        isFullBlankRow = False
+                    
+                    def _getText(node):  # 获得文本，可能由内部节点提供（比如<Data><B><Font>xxx</Font></B><I>yyy</I></Data> -> xxxyyy）
+                        if node.text:  # 注意：<Data></Data>为None，但空白<Data>   </Data>不为None
+                            return node.text.strip()
+                        
+                        s = ''
+                        for nod in node:  # 所有子节点拼接
+                            s += _getText(nod)
+                        return s
+                    
+                    dataText = _getText(dataNode)                    
+
+                if dataText:
+                    isFullBlankRow = False
+
                 row.append(dataText)
 
             if lastFullBlankRowNumber > 0:
