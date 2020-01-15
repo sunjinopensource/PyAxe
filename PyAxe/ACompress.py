@@ -6,6 +6,22 @@ from . import ALog
 __all__ = ['zip', 'unzip', 'untar', 'tar']
 
 
+class ZipFileWithPermissions(zipfile.ZipFile):  
+    """ Custom ZipFile class handling file permissions. 解决extractall文件可执行属性丢失的问题
+    https://stackoverflow.com/questions/39296101/python-zipfile-removes-execute-permissions-from-binaries
+    """
+    def _extract_member(self, member, targetpath, pwd):
+        if not isinstance(member, zipfile.ZipInfo):
+            member = self.getinfo(member)
+
+        targetpath = super()._extract_member(member, targetpath, pwd)
+
+        attr = member.external_attr >> 16
+        if attr != 0:
+            os.chmod(targetpath, attr)
+        return targetpath
+
+
 def zip(dir, zipPath, keepTopDir=True):
     """
     :param keepTopDir: 是否在压缩包中保留顶层目录
@@ -20,6 +36,7 @@ def zip(dir, zipPath, keepTopDir=True):
             zipObj.write(path, path[skipLen:])
     zipObj.close()
 
+"""该版本unzip存在问题，文件的可执行属性(x)会丢失
 def unzip(zipPath, dir='.'):
     ALog.info('-=> unzip(%s, %s)', zipPath, dir)
     if not os.path.exists(dir):
@@ -39,6 +56,11 @@ def unzip(zipPath, dir='.'):
             outfile = open(extFileName, 'wb')
             outfile.write(zipObj.read(name))
             outfile.close()
+"""
+def unzip(zipPath, dir='.'):
+    ALog.info('-=> unzip(%s, %s)', zipPath, dir)
+    zipObj = ZipFileWithPermissions(zipPath)
+    zipObj.extractall(dir)
 
 
 def tar(dir, tarPath, mode='gz', keepTopDir=True):
