@@ -1,3 +1,4 @@
+from collections import OrderedDict
 
 def listInsertAfter(lst, a, b):
     """ insert a after b, if b not exist then append last """
@@ -28,3 +29,10 @@ def listUnique(lst):
 def listRemoveAll(lst, item):
     while item in lst:
         lst.remove(item)
+
+
+def orderedDictFromTuples(tuples):
+    ret = OrderedDict()
+    for item in tuples:
+        ret[item[0]] = item[1]
+    return ret

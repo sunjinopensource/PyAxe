@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.24
++ACollection.orderedDictFromTuples
+
 ## 1.0.23
 fix ACompress.unzip lose file x attribute
 
