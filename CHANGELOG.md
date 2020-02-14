@@ -1,21 +1,27 @@
 # Changelog
 
 ## 1.0.24
+
 +ACollection.orderedDictFromTuples
 
 ## 1.0.23
+
 fix ACompress.unzip lose file x attribute
 
 ## 1.0.22
+
 fix AWorkbook Data.text
 
 ## 1.0.21
+
 fix AFTP.dir parsing line bug
 
 ## 1.0.20
+
 AWorkbook check Data
 
 ## 1.0.19
+
 AOS.FileLockStrategy for Linux
 
 ## 1.0.18
