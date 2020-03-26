@@ -19,7 +19,7 @@ def readStripedLines(filePath, *args, **kwargs):
             yield line
 
 
-def replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=None, newline=None):
+def _replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=None, newline=None):
     """
     使用replaceMap对文件内容进行替换
     useRegex: replaceMap是否使用正则表达式
@@ -37,11 +37,30 @@ def replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=
         raise File_Error('replaceFileContent(%s) failure: %s' % (filePath, e))
 
 
+def replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=None, newline=None):
+    """
+    使用replaceMap对文件内容进行替换
+    useRegex: replaceMap是否使用正则表达式
+    encoding: 支持传递多个编码tuple/list（只要其中一个编码（可以为None）能打开即可）
+    """
+    if isinstance(encoding, (tuple, list)):
+        for encod in encoding:
+            try:
+                _replaceContent(filePath, replaceMap, useRegex=useRegex, regexFlags=regexFlags, encoding=encod, newline=newline)
+                return
+            except Exception as e:
+                pass
+        raise File_Error('replaceFileContent(%s) failure: can not open with encoding %s' % (filePath, encoding))
+    else:
+        _replaceContent(filePath, replaceMap, useRegex=useRegex, regexFlags=regexFlags, encoding=encoding, newline=newline)
+
+
 def replaceContentInDir(dir, replaceMap, fileMatchRule=None, useRegex=False, regexFlags=0, encoding=None, newline=None):
     """
     对目录dir下面所有满足条件的文件使用replaceMap进行内容替换
     fileMatchRule(fileName, filePath)是一个函数: 用于决定文件是否要参与替换
     useRegex: replaceMap是否使用正则表达式
+    encoding: 支持传递多个编码tuple/list（只要其中一个编码（可以为None）能打开即可）
     """
     for _, filePath in AOS.walkFiles(dir, fileMatchRule=fileMatchRule):
         replaceContent(filePath, replaceMap, useRegex, regexFlags, encoding, newline)
