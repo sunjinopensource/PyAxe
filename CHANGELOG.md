@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.25
+
++AFile.replaceContent&replaceContentInDir 支持多编码列表
+
 ## 1.0.24
 
 +ACollection.orderedDictFromTuples
