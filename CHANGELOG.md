@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.26
+
+fix AFile.replaceContent 修复异常错误描述
+
 ## 1.0.25
 
 +AFile.replaceContent&replaceContentInDir 支持多编码列表
