@@ -19,22 +19,24 @@ def readStripedLines(filePath, *args, **kwargs):
             yield line
 
 
+class _replaceContent_StrReplaceError(AError.Error):
+    pass
+
 def _replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=None, newline=None):
     """
     使用replaceMap对文件内容进行替换
     useRegex: replaceMap是否使用正则表达式
     """
-    try:
-        with open(filePath, encoding=encoding, newline=newline) as fp:
-            s = fp.read()
+    with open(filePath, encoding=encoding, newline=newline) as fp:
+        s = fp.read()
+        try:
             newStr = AStr.replace(s, replaceMap, useRegex, regexFlags)
+        except Exception as e:
+            raise _replaceContent_StrReplaceError('%s' % e)
 
-        if id(newStr) != id(s):  # changed
-            with open(filePath, 'w', encoding=encoding, newline=newline) as fp:
-                fp.write(newStr)
-
-    except Exception as e:
-        raise File_Error('replaceFileContent(%s) failure: %s' % (filePath, e))
+    if id(newStr) != id(s):  # changed
+        with open(filePath, 'w', encoding=encoding, newline=newline) as fp:
+            fp.write(newStr)
 
 
 def replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=None, newline=None):
@@ -44,15 +46,19 @@ def replaceContent(filePath, replaceMap, useRegex=False, regexFlags=0, encoding=
     encoding: 支持传递多个编码tuple/list（只要其中一个编码（可以为None）能打开即可）
     """
     if isinstance(encoding, (tuple, list)):
-        for encod in encoding:
-            try:
-                _replaceContent(filePath, replaceMap, useRegex=useRegex, regexFlags=regexFlags, encoding=encod, newline=newline)
-                return
-            except Exception as e:
-                pass
-        raise File_Error('replaceFileContent(%s) failure: can not open with encoding %s' % (filePath, encoding))
+        lst = encoding
     else:
-        _replaceContent(filePath, replaceMap, useRegex=useRegex, regexFlags=regexFlags, encoding=encoding, newline=newline)
+        lst = [encoding]
+
+    for encode in lst:
+        try:
+            _replaceContent(filePath, replaceMap, useRegex=useRegex, regexFlags=regexFlags, encoding=encode, newline=newline)
+            return
+        except _replaceContent_StrReplaceError as e:
+            raise File_Error('replaceFileContent(%s) failure: %s' % (filePath, e))
+        except Exception as e:
+            pass
+    raise File_Error('replaceFileContent(%s) failure: can not open with encoding %s' % (filePath, encoding))
 
 
 def replaceContentInDir(dir, replaceMap, fileMatchRule=None, useRegex=False, regexFlags=0, encoding=None, newline=None):
