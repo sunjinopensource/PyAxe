@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.27
++AFile.read&write&append
++AStr.insert&camelToUnderScore
++ACollection.mapUpdateCopy&mapMergeCopy
+
 ## 1.0.26
 
 fix AFile.replaceContent 修复异常错误描述
