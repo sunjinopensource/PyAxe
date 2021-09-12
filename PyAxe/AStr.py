@@ -42,3 +42,38 @@ def replace(s, replaceMap, useRegex=False, regexFlags=0):
             if k in s:
                 s = s.replace(k, v)
     return s
+
+
+def camelToUnderScore(s):
+    """
+    AbcDef -> Abc_Def
+    AbcDEFGhi -> Abc_DEF_Ghi
+    abcAbcDEF -> abc_Abc_DEF
+    """ 
+    prev = None
+    ret = ''    
+    
+    for i, c in enumerate(s):
+        if c.islower(): # 小写字母直接追加
+            ret += c
+        else:  # 当前为大写字母
+            if prev is None:  # 前一个字母不存在或小写
+                # 新单词开端
+                ret += c
+            elif prev.islower():  # 前一个字母小写
+                # 新单词开端
+                ret += '_' + c
+            else:  # 前一个字母为大写
+                if i == len(s)-1:  # 没有下一个字母
+                    # 非新单词开端
+                    ret += c
+                else:  # 有下一个字母
+                    if s[i+1].islower():  # 下一个字母为小写                    
+                        # 当前字母为新单词开端
+                        ret += '_' + c
+                    else:  # 下一个字母为大写
+                        # 当前字母非新单词开端
+                        ret += c
+        prev = c
+       
+    return ret
