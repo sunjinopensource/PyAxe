@@ -31,8 +31,22 @@ def listRemoveAll(lst, item):
         lst.remove(item)
 
 
+def mapUpdateCopy(m, **kwargs):
+    ret = m.copy()
+    ret.update(**kwargs)
+    return ret
+
+
+def mapMergeCopy(a, b):
+    ret = a.copy()
+    ret.update(b)
+    return ret
+
+
 def orderedDictFromTuples(tuples):
     ret = OrderedDict()
     for item in tuples:
         ret[item[0]] = item[1]
     return ret
+
+
