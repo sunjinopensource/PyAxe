@@ -6,6 +6,21 @@ class File_Error(AError.Error):
     pass
 
 
+def read(filePath, encoding=None, newline=None):
+    with open(filePath, encoding=encoding, newline=newline) as fp:
+        return fp.read()
+
+
+def write(filePath, content, encoding=None, newline=None):
+    with open(filePath, 'w', encoding=encoding, newline=newline) as fp:
+        fp.write(content)
+
+
+def append(filePath, content, encoding=None, newline=None):
+    with open(filePath, 'a', encoding=encoding, newline=newline) as fp:
+        fp.write(content)
+
+
 def readStripedLines(filePath, *args, **kwargs):
     """
     每次返回一个非空行，并且去除了行首尾的空白.
@@ -90,11 +105,6 @@ def isNewer(aPath, bPath):
         return True
 
     return aStat.st_mtime > bStat.st_mtime
-
-
-def write(filePath, content, encoding=None, newline=None):
-    with open(filePath, 'w', encoding=encoding, newline=newline) as fp:
-        fp.write(content)
 
 
 def tryWrite(filePath, content, encoding=None, newline=None):
