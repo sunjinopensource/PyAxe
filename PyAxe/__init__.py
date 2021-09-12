@@ -20,6 +20,7 @@ __all__ = [
     'AOS',
     'APyInstaller',
     'AStr',
+    'ARe',
     'ASVN',
     'ATab',
     'AUtil',
