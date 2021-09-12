@@ -77,3 +77,10 @@ def camelToUnderScore(s):
         prev = c
        
     return ret
+
+
+def insert(src, pos, s):
+    """在src的pos处插入s"""
+    before = src[:pos]
+    after = src[pos:]
+    return before + s + after
