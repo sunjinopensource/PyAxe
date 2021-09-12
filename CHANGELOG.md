@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.28
++ARe.makeOpenClosePattern
+
 ## 1.0.27
 +AFile.read&write&append
 +AStr.insert&camelToUnderScore
