@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.29
+fix AOS.copyDir&copyFile: add -f
+
 ## 1.0.28
 +ARe.makeOpenClosePattern
 

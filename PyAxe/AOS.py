@@ -325,7 +325,7 @@ def copyFile(src, dst):
     if os.name == 'nt':
         system('copy /y %s %s' % (fixPathArg(src), fixPathArg(dst)))
     else:
-        system('cp -P %s %s' % (fixPathArg(src), fixPathArg(dst)))  # -P 保持符号链接
+        system('cp -Pf %s %s' % (fixPathArg(src), fixPathArg(dst)))  # -P 保持符号链接
 
 
 def copyDir(srcDir, dstDir, excludes=None):
@@ -380,7 +380,7 @@ def copyDir(srcDir, dstDir, excludes=None):
     else:
         makeDir(dstDir)
         if excludes is None:
-            system('cp -R %s/* %s' % (fixPathArg(srcDir), fixPathArg(dstDir)))
+            system('cp -Rf %s/* %s' % (fixPathArg(srcDir), fixPathArg(dstDir)))
         else:
             _copyDirByPatterns(srcDir, dstDir, excludes)
 
