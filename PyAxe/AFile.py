@@ -154,9 +154,26 @@ def isEncodingWith(filePath, encoding):
         return False
 
 
-def convertEncoding(filePath, encodingFrom, encodingTo, newline=None):
+def _convertEncoding(filePath, encodingFrom, encodingTo, newline=None):
     with open(filePath, encoding=encodingFrom, newline=newline) as fp:
         s = fp.read()
 
     with open(filePath, 'w', encoding=encodingTo, newline=newline) as fp:
         fp.write(s)
+
+
+def convertEncoding(filePath, encodingFrom, encodingTo, newline=None):
+    if not isinstance(encodingFrom, (tuple, list)):
+        _convertEncoding(filePath, encodingFrom, encodingTo, newline)
+        return
+
+    errMsg = ''
+    for enc in encodingFrom:
+        try:
+            _convertEncoding(filePath, enc, encodingTo, newline)
+            return
+        except Exception as e:
+            errMsg += str(e) + '|'
+            pass
+    
+    raise RuntimeError(errMsg)

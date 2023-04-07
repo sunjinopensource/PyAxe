@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.30
+AFile.convertEncoding: encodingFrom support tuple/list
+
 ## 1.0.29
 fix AOS.copyDir&copyFile: add -f
 
