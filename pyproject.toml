@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "PyAxe"
-version = "1.0.31"
+version = "1.0.32"
 authors = [
   { name="Sun Jin", email="412640665@qq.com" },
 ]
