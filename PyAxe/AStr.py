@@ -84,3 +84,31 @@ def insert(src, pos, s):
     before = src[:pos]
     after = src[pos:]
     return before + s + after
+
+
+def getFuBaMap(FuBa, FuBaCN, charset='fuba'):
+    """charset必须为4个小写字母"""
+    s_FuBaCN = charset[0].upper()+charset[1]+charset[2].upper()+charset[3]+'CN'
+    s_FuBa = charset[0].upper()+charset[1]+charset[2].upper()+charset[3]
+    s_fuba = charset
+    s_FUBA = charset.upper()
+    s_Fuba = s_fuba.capitalize()
+    s_fuBa = s_FuBa[0].lower()+s_FuBa[1:]
+    s_Fu_Ba = charset[0].upper()+charset[1]+'_'+charset[2].upper()+charset[3]
+    s_fu_ba = charset[0]+charset[1]+'_'+charset[2]+charset[3]
+    s_FU_BA = charset[0].upper()+charset[1].upper()+'_'+charset[2].upper()+charset[3].upper()
+    s_Fu_ba = s_fu_ba.capitalize()
+    s_fu_Ba = s_Fu_Ba[0].lower()+s_Fu_Ba[1:]
+    return {        
+        s_FuBaCN: FuBaCN,
+        s_FuBa: FuBa,
+        s_fuba: FuBa.lower(),
+        s_FUBA: FuBa.upper(),
+        s_Fuba: FuBa.capitalize(),
+        s_fuBa: FuBa[0].lower()+FuBa[1:],
+        s_Fu_Ba: camelToUnderScore(FuBa),
+        s_fu_ba: camelToUnderScore(FuBa).lower(),
+        s_FU_BA: camelToUnderScore(FuBa).upper(),
+        s_Fu_ba: camelToUnderScore(FuBa).capitalize(),
+        s_fu_Ba: camelToUnderScore(FuBa)[0].lower() + camelToUnderScore(FuBa)[1:],
+    }

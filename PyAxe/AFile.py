@@ -21,6 +21,14 @@ def append(filePath, content, encoding=None, newline=None):
         fp.write(content)
 
 
+def appendUnique(filePath, content, encoding=None, newline=None):
+    """仅当文件不存在此内容才追加"""
+    if content in read(filePath, encoding, newline):
+        return False
+    append(filePath, content, encoding, newline)
+    return True
+        
+
 def readStripedLines(filePath, *args, **kwargs):
     """
     每次返回一个非空行，并且去除了行首尾的空白.
@@ -177,3 +185,75 @@ def convertEncoding(filePath, encodingFrom, encodingTo, newline=None):
             pass
     
     raise RuntimeError(errMsg)
+
+
+def insertStrInFile(filePath, encoding, posCallback, s, newline=None):
+    """
+    在文件的某个位置（通过回调获得）插入s
+    """
+    with open(filePath, encoding=encoding, newline=newline) as fp:
+        content = fp.read()
+    
+    # 找到插入位置
+    pos = posCallback(content)
+    if pos == -1:
+        raise RuntimeError("向文件插入内容失败：" + filePath)
+
+    afterContent = AStr.insert(content, pos, s)
+    with open(filePath, mode='w', encoding=encoding) as fp:
+        fp.write(afterContent)
+
+
+def searchLastMatchPos(s, pattern):
+    """
+    找到所匹配的最后一个子串的位置范围[开始,结束)
+    pattern: construct with re.compile
+    """
+    pos = 0
+    length = 0  # 匹配的子串长度
+    ss = s[pos:]
+    firstFlag = True
+    while True:
+        m = pattern.search(ss)
+        if m:
+            firstFlag = False
+            endPos = m.regs[0][1]
+            length = endPos - m.regs[0][0]
+            pos += endPos
+            ss = s[pos:]
+        else:
+            if firstFlag:
+                return (-1, -1)
+            return (pos-length, pos)
+
+
+def insertAtLastMatchBeginPosOfFile(filePath, encoding, pattern, s, skipIfExist=False):
+    """
+    在文件匹配模式的最后一个匹配处的开始位置插入s
+    """
+    if skipIfExist:
+        with open(filePath, encoding=encoding) as fp:
+            content = fp.read()
+            if s.strip() in content:
+                return
+            
+    def posCallback(content):
+        return searchLastMatchPos(content, pattern)[0]
+        
+    insertStrInFile(filePath, encoding, posCallback, s)
+
+
+def insertAtLastMatchEndPosOfFile(filePath, encoding, pattern, s, skipIfExist=False):
+    """
+    在文件匹配模式的最后一个匹配处的结束位置插入s
+    """
+    if skipIfExist:
+        with open(filePath, encoding=encoding) as fp:
+            content = fp.read()
+            if s.strip() in content:
+                return
+            
+    def posCallback(content):
+        return searchLastMatchPos(content, pattern)[1]
+    
+    insertStrInFile(filePath, encoding, posCallback, s)
