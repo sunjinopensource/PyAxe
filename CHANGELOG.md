@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.1.0
+## 1.0.32
 AFile add some api for insert contents
 
 ## 1.0.31
