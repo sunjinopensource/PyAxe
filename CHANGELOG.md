@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.0.33
+AOS.system add arg: raiseOnError 
+
 ## 1.0.32
 AFile add some api for insert contents
 

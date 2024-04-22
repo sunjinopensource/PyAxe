@@ -167,7 +167,7 @@ def fixPathArg(path):
         return path.replace(' ', '\\ ')
 
 
-def system(cmd, echo=True, nullout=False):
+def system(cmd, echo=True, nullout=False, raiseOnError=True):
     def fixRetCode(code):
         if os.name != 'nt':
             # 在Unix上，os.system返回值是一个16位整数，其中高8位为目标退出码（参考os.wait）
@@ -187,7 +187,9 @@ def system(cmd, echo=True, nullout=False):
     code = fixRetCode(os.system(cmd))
     if code == 0:
         return
-    raise OS_SystemError(cmd, code)
+    
+    if raiseOnError:
+        raise OS_SystemError(cmd, code)
 
 
 def process(cmd, encoding=None, shell=False):
