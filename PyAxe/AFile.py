@@ -204,6 +204,46 @@ def insertStrInFile(filePath, encoding, posCallback, s, newline=None):
         fp.write(afterContent)
 
 
+def searchFirstMatchPos(s, pattern):
+    """
+    找到所匹配的第一个子串的位置范围[开始,结束)
+    pattern: construct with re.compile
+    """
+    m = pattern.search(s)
+    if not m:
+        return (-1, -1)
+
+    endPos = m.regs[0][1]
+    length = endPos - m.regs[0][0]
+    return (endPos-length, endPos)
+
+
+def insertAtFirstMatchBeginPosOfFile(filePath, encoding, pattern, s, skipIfExist=False):
+    """
+    在文件匹配模式的第一个匹配处的开始位置插入s
+    """
+    if skipIfExist and s.strip() in read(filePath, encoding):
+        return
+            
+    def posCallback(content):
+        return searchFirstMatchPos(content, pattern)[0]
+        
+    insertStrInFile(filePath, encoding, posCallback, s)
+
+
+def insertAtFirstMatchEndPosOfFile(filePath, encoding, pattern, s, skipIfExist=False):
+    """
+    在文件匹配模式的第一个匹配处的结束位置插入s
+    """
+    if skipIfExist and s.strip() in read(filePath, encoding):
+        return
+            
+    def posCallback(content):
+        return searchFirstMatchPos(content, pattern)[1]
+    
+    insertStrInFile(filePath, encoding, posCallback, s)
+
+
 def searchLastMatchPos(s, pattern):
     """
     找到所匹配的最后一个子串的位置范围[开始,结束)
@@ -231,11 +271,8 @@ def insertAtLastMatchBeginPosOfFile(filePath, encoding, pattern, s, skipIfExist=
     """
     在文件匹配模式的最后一个匹配处的开始位置插入s
     """
-    if skipIfExist:
-        with open(filePath, encoding=encoding) as fp:
-            content = fp.read()
-            if s.strip() in content:
-                return
+    if skipIfExist and s.strip() in read(filePath, encoding):
+        return
             
     def posCallback(content):
         return searchLastMatchPos(content, pattern)[0]
@@ -247,11 +284,8 @@ def insertAtLastMatchEndPosOfFile(filePath, encoding, pattern, s, skipIfExist=Fa
     """
     在文件匹配模式的最后一个匹配处的结束位置插入s
     """
-    if skipIfExist:
-        with open(filePath, encoding=encoding) as fp:
-            content = fp.read()
-            if s.strip() in content:
-                return
+    if skipIfExist and s.strip() in read(filePath, encoding):
+        return
             
     def posCallback(content):
         return searchLastMatchPos(content, pattern)[1]

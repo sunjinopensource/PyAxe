@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
++AFile.insertAtFirstMatchBeginPosOfFile
++AFile.insertAtFirstMatchEndPosOfFile
+
 ## 1.0.33
 AOS.system add arg: raiseOnError 
 
