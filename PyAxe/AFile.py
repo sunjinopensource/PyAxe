@@ -130,6 +130,10 @@ def isEncodingWith(filePath, encoding):
     注意：无法100%保证
     1. 一个纯英文的文件，既可视为iso-8859-1，也可视为utf8    
     1. UTF8-BOM编码的文件，isEncodingWith(GBK)返回True
+    
+    替代方案
+    from charset_normalizer import from_path
+    return from_path(filePath).best().encoding == encoding
     """
     def isUTF8(encoding):
         return encoding.lower() in ('utf8', 'utf-8', 'utf_8', 'u8')
