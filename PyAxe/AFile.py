@@ -133,7 +133,7 @@ def isEncodingWith(filePath, encoding):
     
     替代方案
     from charset_normalizer import from_path
-    return from_path(filePath).best().encoding == encoding
+    print(from_path(filePath).best().encoding)
     """
     def isUTF8(encoding):
         return encoding.lower() in ('utf8', 'utf-8', 'utf_8', 'u8')
